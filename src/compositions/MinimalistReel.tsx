@@ -1,11 +1,11 @@
 import React from "react";
 import { AbsoluteFill, Sequence, useVideoConfig, Audio } from "remotion";
-import { VideoConfig } from "../types/index.js";
-import { themes } from "../styles/themes.js";
-import { BackgroundMedia } from "../components/BackgroundMedia.js";
-import { AnimatedText } from "../components/AnimatedText.js";
-import { Subtitle } from "../components/Subtitle.js";
-import { FadeTransition, FadeIn } from "../components/Effects.js";
+import { VideoConfig } from "../types/index";
+import { themes } from "../styles/themes";
+import { BackgroundMedia } from "../components/BackgroundMedia";
+import { AnimatedText } from "../components/AnimatedText";
+import { Subtitle } from "../components/Subtitle";
+import { FadeTransition, FadeIn } from "../components/Effects";
 
 export const MinimalistReel: React.FC<VideoConfig> = (props) => {
   const { durationInFrames } = useVideoConfig();

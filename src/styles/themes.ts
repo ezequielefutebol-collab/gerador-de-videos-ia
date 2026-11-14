@@ -1,4 +1,4 @@
-import { Theme, VideoStyle } from "../types/index.js";
+import { Theme, VideoStyle } from "../types/index";
 
 export const themes: Record<VideoStyle, Theme> = {
   motivacional: {

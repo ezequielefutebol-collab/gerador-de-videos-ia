@@ -1,10 +1,10 @@
 import React from "react";
 import { Composition } from "remotion";
-import { MotivationalReel } from "./compositions/MotivationalReel.js";
-import { CinematicReel } from "./compositions/CinematicReel.js";
-import { MinimalistReel } from "./compositions/MinimalistReel.js";
-import { EnergyReel } from "./compositions/EnergyReel.js";
-import { VideoConfig } from "./types/index.js";
+import { MotivationalReel } from "./compositions/MotivationalReel";
+import { CinematicReel } from "./compositions/CinematicReel";
+import { MinimalistReel } from "./compositions/MinimalistReel";
+import { EnergyReel } from "./compositions/EnergyReel";
+import { VideoConfig } from "./types/index";
 
 type AnyProps = Record<string, unknown>;
 const asComp = <T,>(c: React.FC<T>) => c as unknown as React.ComponentType<AnyProps>;

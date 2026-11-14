@@ -6,10 +6,10 @@
   "scripts": {
     "studio": "remotion studio",
     "generate": "tsx cli/index.ts",
-    "render:motivacional": "remotion render MotivationalReel output/motivacional.mp4",
-    "render:cinematografico": "remotion render CinematicReel output/cinematografico.mp4",
-    "render:minimalista": "remotion render MinimalistReel output/minimalista.mp4",
-    "render:energia": "remotion render EnergyReel output/energia.mp4",
+    "render:motivacional": "remotion render --browser-executable /opt/pw-browsers/chromium-1243/chrome-linux64/chrome MotivationalReel output/motivacional.mp4",
+    "render:cinematografico": "remotion render --browser-executable /opt/pw-browsers/chromium-1243/chrome-linux64/chrome CinematicReel output/cinematografico.mp4",
+    "render:minimalista": "remotion render --browser-executable /opt/pw-browsers/chromium-1243/chrome-linux64/chrome MinimalistReel output/minimalista.mp4",
+    "render:energia": "remotion render --browser-executable /opt/pw-browsers/chromium-1243/chrome-linux64/chrome EnergyReel output/energia.mp4",
     "typecheck": "tsc --noEmit"
   },
   "remotion": {

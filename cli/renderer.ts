@@ -1,8 +1,8 @@
 import path from "path";
 import { bundle } from "@remotion/bundler";
 import { renderMedia, selectComposition } from "@remotion/renderer";
-import { VideoConfig, VideoStyle } from "../src/types/index.js";
-import { addAudioToVideo, optimizeForReels } from "./ffmpeg.js";
+import { VideoConfig, VideoStyle } from "../src/types/index";
+import { addAudioToVideo, optimizeForReels } from "./ffmpeg";
 import { existsSync, mkdirSync } from "fs";
 
 const COMPOSITION_MAP: Record<VideoStyle, string> = {
@@ -43,12 +43,22 @@ export async function renderVideo(
     ? config.outputPath.replace(".mp4", "_noaudio.mp4")
     : config.outputPath;
 
+  const chromiumPaths = [
+    "/opt/pw-browsers/chromium-1243/chrome-linux64/chrome",
+    "/usr/bin/google-chrome",
+    "/usr/bin/chromium-browser",
+  ];
+  const browserExecutable = chromiumPaths.find((p) => {
+    try { return existsSync(p); } catch { return false; }
+  });
+
   await renderMedia({
     composition: { ...composition, durationInFrames },
     serveUrl: bundled,
     codec: "h264",
     outputLocation: tempOutput,
     inputProps: config as unknown as Record<string, unknown>,
+    browserExecutable,
     onProgress: ({ progress }) => onProgress?.(Math.round(progress * 100)),
   });
 

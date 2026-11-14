@@ -1,6 +1,6 @@
 import React from "react";
 import { useCurrentFrame, useVideoConfig, spring, interpolate } from "remotion";
-import { TextBlock } from "../types/index.js";
+import { TextBlock } from "../types/index";
 
 interface Props extends TextBlock {
   style?: React.CSSProperties;

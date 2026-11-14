@@ -3,9 +3,9 @@ import ora from "ora";
 import prompts from "prompts";
 import path from "path";
 import { existsSync } from "fs";
-import { renderVideo } from "./renderer.js";
-import { checkFfmpeg } from "./ffmpeg.js";
-import { VideoConfig, VideoStyle, TextAnimation } from "../src/types/index.js";
+import { renderVideo } from "./renderer";
+import { checkFfmpeg } from "./ffmpeg";
+import { VideoConfig, VideoStyle, TextAnimation } from "../src/types/index";
 
 const STYLE_LABELS: Record<VideoStyle, string> = {
   motivacional: "💜 Motivacional — Texto impactante, gradiente vibrante",
