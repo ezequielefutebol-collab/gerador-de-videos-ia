@@ -1,9 +1,10 @@
 import React from "react";
-import { Composition } from "remotion";
+import { Composition, staticFile } from "remotion";
 import { MotivationalReel } from "./compositions/MotivationalReel";
 import { CinematicReel } from "./compositions/CinematicReel";
 import { MinimalistReel } from "./compositions/MinimalistReel";
 import { EnergyReel } from "./compositions/EnergyReel";
+import { CarCinematic } from "./compositions/CarCinematic";
 import { VideoConfig } from "./types/index";
 
 type AnyProps = Record<string, unknown>;
@@ -68,6 +69,15 @@ export const RemotionRoot: React.FC = () => (
       calculateMetadata={async ({ props }) => ({
         durationInFrames: (props as unknown as VideoConfig).durationInSeconds * 30,
       })}
+    />
+    <Composition
+      id="CarCinematic"
+      component={asComp(CarCinematic)}
+      fps={30}
+      width={1080}
+      height={1920}
+      durationInFrames={300}
+      defaultProps={{ musicPath: staticFile("cinematic_car.aac") } as unknown as AnyProps}
     />
   </>
 );

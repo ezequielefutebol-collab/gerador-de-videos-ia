@@ -10,6 +10,7 @@
     "render:cinematografico": "remotion render --browser-executable /opt/pw-browsers/chromium-1243/chrome-linux64/chrome CinematicReel output/cinematografico.mp4",
     "render:minimalista": "remotion render --browser-executable /opt/pw-browsers/chromium-1243/chrome-linux64/chrome MinimalistReel output/minimalista.mp4",
     "render:energia": "remotion render --browser-executable /opt/pw-browsers/chromium-1243/chrome-linux64/chrome EnergyReel output/energia.mp4",
+    "render:car": "remotion render --browser-executable /opt/pw-browsers/chromium-1243/chrome-linux64/chrome CarCinematic output/car_cinematic.mp4",
     "typecheck": "tsc --noEmit"
   },
   "remotion": {
