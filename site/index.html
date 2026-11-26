@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Erva Mate Timbó — Erva-mate de verdade</title>
+  <meta name="description" content="Erva-mate para chimarrão, tererê, compostas e chá mate. Conheça todos os pacotes da Erva Mate Timbó.">
+  <meta name="theme-color" content="#173f20">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23173f20'/%3E%3Cpath d='M32 12c12 8 14 26 0 40-14-14-12-32 0-40z' fill='%23e9f56b'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ============================== TOPO -->
+  <header class="topo">
+    <nav class="topo-esq" aria-label="Seções">
+      <a class="pilula" href="#ervas">Ervas</a>
+      <a class="pilula" href="#tradicao">Tradição</a>
+      <a class="pilula esconde-mobile" href="#preparo">Preparo</a>
+      <a class="pilula esconde-mobile" href="#contato">Contato</a>
+    </nav>
+    <a class="logo" href="#inicio" aria-label="Erva Mate Timbó — início">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="currentColor"/><path d="M32 12c12 8 14 26 0 40-14-14-12-32 0-40z" fill="var(--fundo-logo, #173f20)"/><path d="M32 18v30" stroke="currentColor" stroke-width="2"/></svg>
+      <span>Erva Mate<br><strong>Timbó</strong></span>
+    </a>
+    <div class="topo-dir">
+      <a class="pilula esconde-mobile" href="#ervas">Comprar</a>
+      <button class="pilula pilula-cheia" id="abrir-sacola" type="button">
+        Sacola <span class="contador" id="contador">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Pacote 3D que acompanha a rolagem -->
+  <div class="palco" id="palco" aria-hidden="true">
+    <div class="palco-flutua">
+      <div class="palco-entra" id="palco-entra">
+        <div class="pacote pacote-grande" id="pacote-heroi"></div>
+      </div>
+    </div>
+  </div>
+
+  <main id="inicio">
+    <div class="historia" id="historia">
+
+      <!-- ============================== HERÓI -->
+      <section class="secao heroi textura">
+        <p class="kicker">Erva-mate selecionada · moída na medida certa</p>
+        <h1 class="titulo-gigante revela">SABOR FORTE</h1>
+        <hr class="linha-pontilhada">
+        <p class="subtitulo revela">Erva Mate Timbó</p>
+        <div class="heroi-rodape">
+          <p class="texto-pequeno">Do pé de erva à sua cuia: folhas colhidas no ponto, secas devagar e embaladas fresquinhas para um chimarrão de verdade.</p>
+          <a class="botao" href="#ervas">Ver todas as ervas</a>
+        </div>
+      </section>
+
+      <!-- ============================== DESPERTE -->
+      <section class="secao desperte textura">
+        <div class="eco" aria-hidden="true">
+          <span>DESPERTE A</span><span>TRADIÇÃO</span>
+        </div>
+        <h2 class="titulo-gigante centro">
+          <span class="linha-txt">DESPERTE A</span>
+          <span class="linha-txt">TRADIÇÃO</span>
+        </h2>
+      </section>
+
+      <!-- ============================== NOVO OLHAR -->
+      <section class="secao olhar textura">
+        <h2 class="titulo-grande">
+          <span class="linha-txt">UM NOVO OLHAR</span>
+          <span class="linha-txt">SOBRE O MATE</span>
+        </h2>
+        <p class="texto-pequeno olhar-txt">O mesmo ritual de sempre, com o cuidado de quem conhece cada etapa: da colheita ao último gole da roda.</p>
+      </section>
+
+      <!-- ============================== SEM ATALHOS -->
+      <section class="secao sem">
+        <div class="sem-esq">
+          <ul class="qualidades">
+            <li><span class="icone">1</span> Folhas colhidas no ponto certo para um verde vivo e um sabor cheio.</li>
+            <li><span class="icone">2</span> Sapeco e secagem lenta, que preservam o aroma e o amargor equilibrado.</li>
+            <li><span class="icone">3</span> Moagem na medida e embalagem fresca para a erva chegar na cuia como saiu do moinho.</li>
+          </ul>
+          <p class="sem-lista">
+            <span><b>SEM</b> ADITIVOS.</span>
+            <span><b>SEM</b> ATALHOS.</span>
+            <span><b>SEM</b> PRESSA.</span>
+          </p>
+        </div>
+        <div class="sem-dir textura-clara"></div>
+      </section>
+    </div>
+
+    <!-- ============================== FAIXA -->
+    <div class="faixa" aria-hidden="true">
+      <div class="faixa-trilho">
+        <span>CHIMARRÃO ✦ TERERÊ ✦ COMPOSTAS ✦ CHÁ MATE ✦ BARBAQUÁ ✦ PURA FOLHA ✦&nbsp;</span>
+        <span>CHIMARRÃO ✦ TERERÊ ✦ COMPOSTAS ✦ CHÁ MATE ✦ BARBAQUÁ ✦ PURA FOLHA ✦&nbsp;</span>
+      </div>
+    </div>
+
+    <!-- ============================== TRADIÇÃO -->
+    <section class="secao tradicao" id="tradicao">
+      <div class="tradicao-txt">
+        <h2 class="titulo-grande escuro revela">TRADIÇÃO<br>&amp; ORIGEM</h2>
+        <p class="texto-pequeno escuro">O mate é herança do Sul. A gente cuida de cada passo do processo para que a sua roda de chimarrão tenha o gosto que sempre teve: forte, verde e cheio de história.</p>
+        <ol class="processo">
+          <li><b>01</b><span>Colheita</span><small>Folhas e ramos no ponto.</small></li>
+          <li><b>02</b><span>Sapeco</span><small>Fogo rápido que fixa o verde.</small></li>
+          <li><b>03</b><span>Secagem</span><small>Lenta, para não amargar.</small></li>
+          <li><b>04</b><span>Cancheamento</span><small>A primeira quebra da folha.</small></li>
+          <li><b>05</b><span>Moagem</span><small>Fina, grossa ou pura folha.</small></li>
+        </ol>
+      </div>
+      <figure class="tradicao-ilustra">
+        <svg viewBox="0 0 320 380" role="img" aria-label="Ilustração de uma cuia de chimarrão com bomba">
+          <rect width="320" height="380" rx="18" fill="#173f20"/>
+          <g opacity=".18" fill="#e9f56b">
+            <path d="M40 60c22 6 30 30 10 50-20-16-24-38-10-50z"/>
+            <path d="M270 40c18 10 20 34-2 48-16-18-14-38 2-48z"/>
+            <path d="M260 300c22 6 30 30 10 50-20-16-24-38-10-50z"/>
+            <path d="M30 290c18 10 20 34-2 48-16-18-14-38 2-48z"/>
+          </g>
+          <rect x="196" y="40" width="10" height="190" rx="5" transform="rotate(14 201 135)" fill="#d9d4c7"/>
+          <rect x="214" y="30" width="22" height="14" rx="5" transform="rotate(14 225 37)" fill="#f4d35e"/>
+          <path d="M70 170h180c0 90-30 160-90 160S70 260 70 170z" fill="#7a4a24"/>
+          <path d="M70 170h180c0 14-2 26-5 38H75c-3-12-5-24-5-38z" fill="#f4d35e"/>
+          <ellipse cx="160" cy="170" rx="90" ry="22" fill="#5d3519"/>
+          <ellipse cx="160" cy="166" rx="78" ry="16" fill="#4f8a3b"/>
+          <path d="M100 164c20-8 40 4 60-2s36-6 56 2" stroke="#8cc04b" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M115 330h90l-8 22h-74z" fill="#5d3519"/>
+        </svg>
+        <figcaption>Feita para a roda de chimarrão.</figcaption>
+      </figure>
+    </section>
+
+    <!-- ============================== CATÁLOGO -->
+    <section class="secao catalogo textura-clara" id="ervas">
+      <div class="catalogo-topo">
+        <h2 class="titulo-grande escuro revela">TODAS AS<br>NOSSAS ERVAS</h2>
+        <p class="texto-pequeno escuro" id="catalogo-resumo"></p>
+      </div>
+      <div class="filtros" role="group" aria-label="Filtrar por linha" id="filtros"></div>
+      <div class="grade" id="grade"></div>
+    </section>
+
+    <!-- ============================== PREPARO -->
+    <section class="secao preparo textura" id="preparo">
+      <span class="selo-redondo" aria-hidden="true">✦</span>
+      <h2 class="titulo-gigante centro revela">BORA<br>MATEAR</h2>
+      <ol class="passos">
+        <li><b>1</b>Encha 2/3 da cuia com erva e incline para formar um morrinho.</li>
+        <li><b>2</b>Molhe a base com um pouco de água morna e espere a erva absorver.</li>
+        <li><b>3</b>Encaixe a bomba no lado molhado, tapando o bocal com o dedo.</li>
+        <li><b>4</b>Sirva com água a uns 70 °C, sem ferver, e passe a cuia pra roda.</li>
+      </ol>
+      <a class="botao" href="#ervas">Escolher minha erva</a>
+    </section>
+
+    <!-- ============================== NEWSLETTER -->
+    <section class="secao novidades" id="contato">
+      <div class="novidades-esq">
+        <h2 class="titulo-medio escuro">NOVIDADES FRESQUINHAS NO SEU E-MAIL + 10% OFF NA PRIMEIRA COMPRA.</h2>
+        <form class="form-email" id="form-email">
+          <label class="sr" for="email">Seu e-mail</label>
+          <input id="email" type="email" required placeholder="seu@email.com" autocomplete="email">
+          <button class="botao botao-escuro" type="submit">Quero</button>
+        </form>
+        <p class="form-msg" id="form-msg" role="status"></p>
+      </div>
+      <div class="novidades-dir textura-clara">
+        <div class="pacote-gira"><div class="pacote pacote-medio" id="pacote-novidades"></div></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================== RODAPÉ -->
+  <footer class="rodape">
+    <div class="rodape-marca">
+      <p class="titulo-medio">ERVA MATE TIMBÓ</p>
+      <p id="rodape-slogan"></p>
+    </div>
+    <ul class="rodape-contato" id="rodape-contato"></ul>
+    <p class="rodape-fim">© <span id="ano"></span> Erva Mate Timbó. Todos os direitos reservados.</p>
+  </footer>
+
+  <!-- ============================== SACOLA -->
+  <div class="sacola-fundo" id="sacola-fundo" hidden></div>
+  <aside class="sacola" id="sacola" aria-label="Sacola de compras" aria-hidden="true">
+    <div class="sacola-topo">
+      <h2>Sua sacola</h2>
+      <button class="fechar" id="fechar-sacola" type="button" aria-label="Fechar sacola">×</button>
+    </div>
+    <ul class="sacola-itens" id="sacola-itens"></ul>
+    <div class="sacola-rodape">
+      <p class="sacola-total"><span>Total</span><strong id="sacola-total">R$ 0,00</strong></p>
+      <button class="botao botao-largo" id="finalizar" type="button">Finalizar pelo WhatsApp</button>
+    </div>
+  </aside>
+
+  <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
+
+  <script src="produtos.js"></script>
+  <script src="vendor/gsap.min.js"></script>
+  <script src="vendor/ScrollTrigger.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
