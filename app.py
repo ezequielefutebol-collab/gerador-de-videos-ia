@@ -423,6 +423,20 @@ HTML = """<!DOCTYPE html>
         <span id="modo-atual" style="color:var(--text)">Verificando...</span>
       </div>
 
+      <!-- Pixabay API Key (recomendado agora) -->
+      <div class="api-row">
+        <label>
+          <span id="badge-pixabay" class="badge badge-off">OFF</span>
+          Pixabay
+        </label>
+        <input type="password" id="input-pixabay" placeholder="Cole sua Pixabay API Key aqui...">
+        <button class="btn btn-sm" onclick="salvarKey('pixabay')">Ativar</button>
+      </div>
+      <div style="font-size:0.78rem; margin:4px 0 10px 120px; color:#666">
+        ⭐ Recomendado — fotos e vídeos gratuitos ·
+        <a href="https://pixabay.com/api/docs/" target="_blank">pixabay.com/api</a>
+      </div>
+
       <!-- Pexels API Key -->
       <div class="api-row">
         <label>
@@ -433,8 +447,9 @@ HTML = """<!DOCTYPE html>
         <button class="btn btn-sm" onclick="salvarKey('pexels')">Ativar</button>
       </div>
       <div style="font-size:0.78rem; margin:4px 0 10px 120px; color:#666">
-        Vídeos e fotos reais de alta qualidade ·
-        <a href="https://www.pexels.com/api/" target="_blank">pexels.com/api</a> (gratuito)
+        Vídeos e fotos HD ·
+        <a href="https://www.pexels.com/api/" target="_blank">pexels.com/api</a>
+        <span style="color:#f57c00"> ⚠ novas chaves pausadas no momento</span>
       </div>
 
       <!-- Claude API Key -->
@@ -447,7 +462,7 @@ HTML = """<!DOCTYPE html>
         <button class="btn btn-sm" onclick="salvarKey('claude')">Ativar</button>
       </div>
       <div style="font-size:0.78rem; margin:4px 0 0 120px; color:#666">
-        Receitas geradas por IA para qualquer prato ·
+        Receitas por IA para qualquer prato ·
         <a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a>
       </div>
 
@@ -523,22 +538,15 @@ async function verificarModo() {
       d.modo_descricao || 'modo básico';
 
     // Atualiza badges
-    const bp = document.getElementById('badge-pexels');
-    const bc = document.getElementById('badge-claude');
-    if (d.tem_pexels) {
-      bp.textContent = 'ON';
-      bp.className = 'badge badge-ok';
-    } else {
-      bp.textContent = 'OFF';
-      bp.className = 'badge badge-off';
-    }
-    if (d.tem_claude) {
-      bc.textContent = 'ON';
-      bc.className = 'badge badge-ok';
-    } else {
-      bc.textContent = 'OFF';
-      bc.className = 'badge badge-off';
-    }
+    const setBadge = (id, on) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = on ? 'ON' : 'OFF';
+      el.className   = on ? 'badge badge-ok' : 'badge badge-off';
+    };
+    setBadge('badge-pexels',  d.tem_pexels);
+    setBadge('badge-pixabay', d.tem_pixabay);
+    setBadge('badge-claude',  d.tem_claude);
   } catch(e) {}
 }
 
@@ -550,27 +558,31 @@ async function salvarKey(tipo) {
   const val = campo.value.trim();
   if (!val) { campo.focus(); return; }
 
-  const body = tipo === 'pexels'
-    ? { pexels_key: val }
-    : { anthropic_key: val };
+  const nomes = { pexels: 'Pexels', pixabay: 'Pixabay', claude: 'Claude AI' };
+  const placeholders = {
+    pexels:  'Cole sua Pexels API Key aqui...',
+    pixabay: 'Cole sua Pixabay API Key aqui...',
+    claude:  'Cole sua Anthropic API Key aqui...',
+  };
+  const bodyMap = {
+    pexels:  { pexels_key:   val },
+    pixabay: { pixabay_key:  val },
+    claude:  { anthropic_key: val },
+  };
 
   try {
     const r = await fetch('/api/configurar', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+      body: JSON.stringify(bodyMap[tipo])
     });
     const d = await r.json();
     if (d.ok) {
       campo.value = '';
       campo.placeholder = '✓ Key salva!';
-      setTimeout(() => {
-        campo.placeholder = tipo === 'pexels'
-          ? 'Cole sua Pexels API Key aqui...'
-          : 'Cole sua Anthropic API Key aqui...';
-      }, 3000);
+      setTimeout(() => { campo.placeholder = placeholders[tipo]; }, 3000);
       document.getElementById('msg-config').textContent =
-        `✅ ${tipo === 'pexels' ? 'Pexels' : 'Claude AI'} ativado com sucesso!`;
+        `✅ ${nomes[tipo]} ativado com sucesso!`;
       await verificarModo();
     }
   } catch(e) {
@@ -725,21 +737,25 @@ def index():
 
 @app.route("/api/status")
 def api_status():
-    tem_claude = bool(config.ANTHROPIC_API_KEY)
-    tem_pexels = bool(config.PEXELS_API_KEY)
+    tem_claude  = bool(config.ANTHROPIC_API_KEY)
+    tem_pexels  = bool(config.PEXELS_API_KEY)
+    tem_pixabay = bool(config.PIXABAY_API_KEY)
+    tem_imagens = tem_pexels or tem_pixabay
 
-    if tem_claude and tem_pexels:
-        modo = "IA completa — Claude AI + vídeos/fotos Pexels"
+    if tem_claude and tem_imagens:
+        modo = "IA completa — Claude AI + imagens reais"
     elif tem_claude:
-        modo = "Claude AI ativo — sem imagens Pexels"
-    elif tem_pexels:
-        modo = "Imagens Pexels ativas — sem Claude AI"
+        modo = "Claude AI ativo — sem imagens (configure Pixabay ou Pexels)"
+    elif tem_imagens:
+        provedor = ("Pixabay" if tem_pixabay else "") + (" + Pexels" if tem_pexels else "")
+        modo = f"Imagens reais ativas ({provedor.strip(' +')}) — sem Claude AI"
     else:
-        modo = "modo básico — configure as API keys para qualidade máxima"
+        modo = "modo básico — adicione uma API key para qualidade máxima"
 
     return jsonify({
-        "tem_claude": tem_claude,
-        "tem_pexels": tem_pexels,
+        "tem_claude":  tem_claude,
+        "tem_pexels":  tem_pexels,
+        "tem_pixabay": tem_pixabay,
         "modo_descricao": modo
     })
 
@@ -753,6 +769,11 @@ def api_configurar():
         nova = data["pexels_key"].strip()
         config.PEXELS_API_KEY = nova
         os.environ["PEXELS_API_KEY"] = nova
+
+    if "pixabay_key" in data:
+        nova = data["pixabay_key"].strip()
+        config.PIXABAY_API_KEY = nova
+        os.environ["PIXABAY_API_KEY"] = nova
 
     if "anthropic_key" in data:
         nova = data["anthropic_key"].strip()

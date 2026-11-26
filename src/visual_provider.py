@@ -1,14 +1,14 @@
 """
-Provedor de visuais com integração completa ao Pexels.
+Provedor de visuais com suporte a Pexels e Pixabay.
 
-Com PEXELS_API_KEY:
-  - Busca fotos e vídeos reais de alta qualidade
-  - Múltiplas tentativas com queries alternativas
-  - Extração de frames de vídeos Pexels para cenas dinâmicas
-  - Cache persistente em disco
+Ordem de prioridade por cena:
+  1. Vídeo Pexels  (se PEXELS_API_KEY definida)
+  2. Foto Pexels   (se PEXELS_API_KEY definida)
+  3. Vídeo Pixabay (se PIXABAY_API_KEY definida)
+  4. Foto Pixabay  (se PIXABAY_API_KEY definida)
+  5. Fundo gerado localmente com PIL (sempre disponível)
 
-Sem PEXELS_API_KEY:
-  - Fundos cinematográficos gerados localmente com PIL
+Cache em disco — recursos já baixados não são rebaixados.
 """
 import os
 import sys
@@ -261,6 +261,153 @@ def extrair_frames_video(video_path: str, duracao_cena: float, fps: int = None) 
 
 
 # ─────────────────────────────────────────────────────────────
+# PIXABAY — FOTOS E VÍDEOS
+# ─────────────────────────────────────────────────────────────
+
+def buscar_pixabay_foto(query: str, indice: int = 0) -> str | None:
+    """
+    Busca foto no Pixabay.
+    API gratuita: https://pixabay.com/api/docs/
+    Retorna caminho local do JPG em cache, ou None.
+    """
+    if not config.PIXABAY_API_KEY:
+        return None
+
+    cache_key = _chave_cache(f"pixabay_foto_{query}_{indice}")
+    cache_file = CACHE_DIR / f"pixabay_foto_{cache_key}.jpg"
+    if cache_file.exists() and cache_file.stat().st_size > 5000:
+        return str(cache_file)
+
+    try:
+        resp = requests.get(
+            "https://pixabay.com/api/",
+            params={
+                "key":        config.PIXABAY_API_KEY,
+                "q":          query,
+                "image_type": "photo",
+                "orientation":"vertical",
+                "category":   "food",
+                "per_page":   15,
+                "safesearch": "true",
+                "order":      "popular",
+            },
+            timeout=12,
+        )
+        if resp.status_code != 200:
+            print(f"[Pixabay Foto] HTTP {resp.status_code}")
+            return None
+
+        hits = resp.json().get("hits", [])
+        if not hits:
+            # Sem filtro de categoria
+            resp2 = requests.get(
+                "https://pixabay.com/api/",
+                params={
+                    "key": config.PIXABAY_API_KEY,
+                    "q": query,
+                    "image_type": "photo",
+                    "per_page": 15,
+                    "safesearch": "true",
+                },
+                timeout=12,
+            )
+            hits = resp2.json().get("hits", []) if resp2.status_code == 200 else []
+
+        if not hits:
+            return None
+
+        hit = hits[indice % len(hits)]
+        # Pega a maior resolução disponível
+        url = hit.get("largeImageURL") or hit.get("webformatURL")
+
+        img_bytes = requests.get(url, timeout=20).content
+        with open(cache_file, "wb") as f:
+            f.write(img_bytes)
+
+        print(f"[Pixabay Foto] ✓ {query!r} → hit {indice % len(hits) + 1}/{len(hits)}")
+        return str(cache_file)
+
+    except Exception as e:
+        print(f"[Pixabay Foto] Erro: {e}")
+        return None
+
+
+def buscar_pixabay_video(query: str, indice: int = 0) -> str | None:
+    """
+    Busca vídeo no Pixabay (API de vídeos gratuita).
+    Retorna caminho local do MP4 em cache, ou None.
+    """
+    if not config.PIXABAY_API_KEY:
+        return None
+
+    cache_key = _chave_cache(f"pixabay_video_{query}_{indice}")
+    cache_file = CACHE_DIR / f"pixabay_video_{cache_key}.mp4"
+    if cache_file.exists() and cache_file.stat().st_size > 50000:
+        return str(cache_file)
+
+    try:
+        resp = requests.get(
+            "https://pixabay.com/api/videos/",
+            params={
+                "key":        config.PIXABAY_API_KEY,
+                "q":          query,
+                "video_type": "film",
+                "category":   "food",
+                "per_page":   10,
+                "safesearch": "true",
+                "order":      "popular",
+            },
+            timeout=12,
+        )
+        if resp.status_code != 200:
+            print(f"[Pixabay Video] HTTP {resp.status_code}")
+            return None
+
+        hits = resp.json().get("hits", [])
+        if not hits:
+            # Sem filtro de categoria
+            resp2 = requests.get(
+                "https://pixabay.com/api/videos/",
+                params={
+                    "key": config.PIXABAY_API_KEY,
+                    "q": query,
+                    "per_page": 10,
+                    "safesearch": "true",
+                },
+                timeout=12,
+            )
+            hits = resp2.json().get("hits", []) if resp2.status_code == 200 else []
+
+        if not hits:
+            return None
+
+        hit = hits[indice % len(hits)]
+        videos = hit.get("videos", {})
+
+        # Escolhe qualidade: large (1080p) > medium (720p) > small
+        for qualidade in ("large", "medium", "small"):
+            vid = videos.get(qualidade, {})
+            url = vid.get("url")
+            if url:
+                break
+        else:
+            return None
+
+        print(f"[Pixabay Video] Baixando {query!r} ({qualidade})...")
+        r = requests.get(url, timeout=60, stream=True)
+        with open(cache_file, "wb") as f:
+            for chunk in r.iter_content(chunk_size=256 * 1024):
+                f.write(chunk)
+
+        print(f"[Pixabay Video] ✓ salvo ({cache_file.stat().st_size // 1024} KB)")
+        return str(cache_file)
+
+    except Exception as e:
+        print(f"[Pixabay Video] Erro: {e}")
+        return None
+
+
+# ─────────────────────────────────────────────────────────────
 # PROCESSAMENTO DE IMAGEM
 # ─────────────────────────────────────────────────────────────
 
@@ -402,49 +549,80 @@ class VisualCena:
         return self.imagem_base
 
 
+def _tentar_video(busca: str, tipo_cena: str, indice: int,
+                  duracao_cena: float, fn_video, fonte_nome: str) -> "VisualCena | None":
+    """Tenta buscar vídeo com uma função fornecida e retorna VisualCena ou None."""
+    video_path = fn_video(busca, indice)
+    if not video_path:
+        return None
+    frames = extrair_frames_video(video_path, duracao_cena)
+    if not frames:
+        return None
+    visual = VisualCena()
+    visual.frames_video = [_aplicar_tratamento_em_frame(f) for f in frames]
+    visual.fonte = fonte_nome
+    print(f"[Visual] ✓ {fonte_nome} — '{tipo_cena}' ({len(frames)} frames)")
+    return visual
+
+
+def _tentar_foto(busca: str, tipo_cena: str, fn_foto, fonte_nome: str) -> "VisualCena | None":
+    """Tenta buscar foto com uma função fornecida e retorna VisualCena ou None."""
+    foto_path = fn_foto(busca, 0)
+    if not foto_path:
+        return None
+    try:
+        visual = VisualCena()
+        visual.imagem_base = aplicar_foto_na_cena(foto_path)
+        visual.fonte = fonte_nome
+        print(f"[Visual] ✓ {fonte_nome} — '{tipo_cena}' query={busca!r}")
+        return visual
+    except Exception as e:
+        print(f"[Visual] Erro ao processar foto ({fonte_nome}): {e}")
+        return None
+
+
 def obter_visual_cena(tipo_cena: str, busca_visual: str, indice: int = 0,
-                      duracao_cena: float = 6.0) -> VisualCena:
+                      duracao_cena: float = 6.0) -> "VisualCena":
     """
     Obtém o visual para uma cena.
-    Ordem de preferência:
-      1. Vídeo Pexels (mais dinâmico)
-      2. Foto Pexels
-      3. Fundo gerado localmente
+
+    Ordem de prioridade:
+      1. Vídeo Pexels   (PEXELS_API_KEY)
+      2. Vídeo Pixabay  (PIXABAY_API_KEY)
+      3. Foto Pexels    (PEXELS_API_KEY)
+      4. Foto Pixabay   (PIXABAY_API_KEY)
+      5. Fundo gerado   (sempre disponível)
     """
+    queries = [busca_visual] + QUERIES_FALLBACK.get(tipo_cena, [])[:2]
+
+    # ── 1 e 2: Vídeos ────────────────────────────────────────────
+    for q in queries:
+        if config.PEXELS_API_KEY:
+            v = _tentar_video(q, tipo_cena, indice, duracao_cena,
+                              buscar_pexels_video, "video_pexels")
+            if v:
+                return v
+
+        if config.PIXABAY_API_KEY:
+            v = _tentar_video(q, tipo_cena, indice, duracao_cena,
+                              buscar_pixabay_video, "video_pixabay")
+            if v:
+                return v
+
+    # ── 3 e 4: Fotos ─────────────────────────────────────────────
+    for q in queries:
+        if config.PEXELS_API_KEY:
+            v = _tentar_foto(q, tipo_cena, buscar_pexels_foto, "foto_pexels")
+            if v:
+                return v
+
+        if config.PIXABAY_API_KEY:
+            v = _tentar_foto(q, tipo_cena, buscar_pixabay_foto, "foto_pixabay")
+            if v:
+                return v
+
+    # ── 5: Fundo gerado ───────────────────────────────────────────
     visual = VisualCena()
-
-    if config.PEXELS_API_KEY:
-        # ── Tenta vídeo primeiro ──────────────────────────────────
-        queries_video = [busca_visual] + QUERIES_FALLBACK.get(tipo_cena, [])[:2]
-
-        for q in queries_video:
-            video_path = buscar_pexels_video(q, indice)
-            if video_path:
-                frames = extrair_frames_video(video_path, duracao_cena)
-                if frames:
-                    # Aplica tratamento cinematográfico leve nos frames
-                    visual.frames_video = [_aplicar_tratamento_em_frame(f) for f in frames]
-                    visual.fonte = "video_pexels"
-                    print(f"[Visual] ✓ Vídeo Pexels — cena '{tipo_cena}' ({len(frames)} frames)")
-                    return visual
-            # Pequena pausa entre tentativas para não saturar a API
-            # (já está cacheado na 2ª vez)
-
-        # ── Fallback: foto ────────────────────────────────────────
-        queries_foto = [busca_visual] + QUERIES_FALLBACK.get(tipo_cena, [])[:3]
-
-        for q in queries_foto:
-            foto_path = buscar_pexels_foto(q, indice)
-            if foto_path:
-                try:
-                    visual.imagem_base = aplicar_foto_na_cena(foto_path)
-                    visual.fonte = "foto_pexels"
-                    print(f"[Visual] ✓ Foto Pexels — cena '{tipo_cena}' query={q!r}")
-                    return visual
-                except Exception as e:
-                    print(f"[Visual] Erro ao processar foto: {e}")
-
-    # ── Fallback final: fundo gerado ──────────────────────────────
     visual.imagem_base = gerar_fundo_cinematografico(tipo_cena)
     visual.fonte = "gerado"
     return visual

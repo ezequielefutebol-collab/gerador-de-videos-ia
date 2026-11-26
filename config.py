@@ -12,7 +12,13 @@ ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 
 # PEXELS — para buscar vídeos e imagens de alta qualidade (gratuito)
 # Obtenha em: https://www.pexels.com/api/
+# ATENÇÃO: Pexels está com emissão de novas chaves pausada (nov/2026)
+# Use Pixabay como alternativa enquanto isso.
 PEXELS_API_KEY = os.getenv("PEXELS_API_KEY", "")
+
+# PIXABAY — alternativa ao Pexels com fotos e vídeos gratuitos
+# Obtenha em: https://pixabay.com/api/docs/ (registro simples, chaves disponíveis)
+PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY", "")
 
 # =============================================================================
 # CONFIGURAÇÕES DO VÍDEO
