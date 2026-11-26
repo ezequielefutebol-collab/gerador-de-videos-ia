@@ -1,5 +1,18 @@
 import os
 
+# Carrega automaticamente o arquivo .env se existir
+def _carregar_env():
+    env_path = os.path.join(os.path.dirname(__file__), ".env")
+    if os.path.exists(env_path):
+        with open(env_path) as f:
+            for linha in f:
+                linha = linha.strip()
+                if linha and not linha.startswith("#") and "=" in linha:
+                    chave, valor = linha.split("=", 1)
+                    os.environ.setdefault(chave.strip(), valor.strip())
+
+_carregar_env()
+
 # =============================================================================
 # CONFIGURAÇÃO DO SISTEMA
 # Para ativar funcionalidades avançadas, insira suas chaves de API abaixo
