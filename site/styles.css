@@ -274,7 +274,8 @@ button { font: inherit; cursor: pointer; }
   transform: rotate(-4deg);
 }
 .card-linha { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; opacity: .65; margin: 0; }
-.card h3 { font-family: var(--titulo); font-weight: 400; text-transform: uppercase; font-size: 30px; line-height: 1; margin: 4px 0 8px; }
+.card h3 { font-family: var(--titulo); font-weight: 400; text-transform: uppercase; font-size: 22px; line-height: 1.08; margin: 4px 0 16px; text-wrap: balance; }
+.preco-consulta { font-family: var(--texto); font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; opacity: .7; }
 .card-desc { font-size: 14px; line-height: 1.45; margin: 0 0 12px; }
 .card-info { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 14px; }
 .intensidade { display: inline-flex; gap: 3px; align-items: center; }
@@ -531,7 +532,7 @@ button { font: inherit; cursor: pointer; }
   .passos { grid-template-columns: 1fr; }
   .rodape { grid-template-columns: 1fr; }
   .rodape-contato { text-align: left; }
-  .card h3 { font-size: 26px; }
+  .card h3 { font-size: 21px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
