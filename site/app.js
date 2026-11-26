@@ -33,7 +33,7 @@
       '<div class="face f-frente"><div class="rotulo">' +
         '<div class="rotulo-faixa">Erva-mate</div>' +
         '<div class="rotulo-emblema">' + FOLHA + "</div>" +
-        '<div class="rotulo-marca">Timbó</div>' +
+        '<div class="rotulo-marca">' + (/Fesmate/.test(p.nome) ? "Fesmate" : "Timbó") + "</div>" +
         '<div class="rotulo-nome">' + esc(curto) + "</div>" +
         '<div class="rotulo-linha">' + esc(rotuloLinha(p)) + "</div>" +
         (p.peso ? '<div class="rotulo-peso">' + esc(p.peso) + "</div>" : "") +
@@ -49,8 +49,8 @@
       '<div class="face f-base"></div>';
   }
 
-  montarPacote($("#pacote-heroi"), porId["tradicional-1kg"] || PRODUTOS[0]);
-  montarPacote($("#pacote-novidades"), porId["capital-1kg"] || PRODUTOS[0]);
+  montarPacote($("#pacote-heroi"), porId["erva-mate-chimarrao-tradicional-1kg"] || PRODUTOS[0]);
+  montarPacote($("#pacote-novidades"), porId["erva-mate-chimarrao-capital-1kg"] || PRODUTOS[0]);
 
   /* ======================================================= CATÁLOGO */
   var grade = $("#grade");

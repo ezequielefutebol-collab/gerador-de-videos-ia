@@ -3,21 +3,13 @@
  *  CATÁLOGO DA LOJA — edite só este arquivo para trocar os produtos.
  * ===================================================================
  *
- *  Nomes copiados das páginas de lojaervamatetimbo.com.br indexadas
- *  pelo buscador (nov/2026). Os preços preenchidos vieram dos trechos
- *  do buscador e podem estar desatualizados; os marcados com null não
- *  apareceram em nenhum trecho e mostram "Preço sob consulta".
- *  CONFIRA cada preço na loja antes de publicar.
+ *  Produtos e preços copiados de lojaervamatetimbo.com.br em 26/11/2026,
+ *  direto da página de cada produto (todos "em estoque" nessa data).
+ *  Ficaram de fora só os acessórios (filtros para bomba e vira mate).
  *
- *  Campos de cada produto:
- *    id        identificador único, sem espaços
- *    nome      nome do produto, como está na loja
- *    rotulo    nome curto impresso no pacote 3D
- *    linha     "chimarrao" | "composto" | "terere" | "cha" | "fardo"
- *    peso      peso/quantidade
- *    preco     preço em reais (número) ou null se não souber
- *    cor       cor principal do pacote (hex)
- *    corTexto  cor do texto no pacote (hex)
+ *  Campos: id, nome (como na loja), rotulo (nome curto no pacote 3D),
+ *  linha ("chimarrao" | "composto" | "terere" | "cha" | "fardo"),
+ *  peso, preco (R$), cor / corTexto (cores do pacote), url (página na loja).
  */
 
 window.LOJA = {
@@ -25,7 +17,7 @@ window.LOJA = {
   slogan: "Erva-mate para chimarrão e tererê. Desde 1980, vendendo para todo o Brasil.",
   // Número do WhatsApp com DDI + DDD, só dígitos (ex.: "5547999999999").
   whatsapp: "",
-  telefone: "(47) 3622-4558", // telefone de revenda que aparece nas páginas da loja
+  telefone: "(47) 3622-4558",
   instagram: "",
   email: "",
   endereco: "",
@@ -36,66 +28,105 @@ window.LINHAS = {
   chimarrao: "Chimarrão Tradicional",
   composto: "Chimarrão Composto",
   terere: "Tererê",
-  cha: "Chá mate",
+  cha: "Chá",
   fardo: "Compra em Fardos",
 };
 
 window.PRODUTOS = [
-  // ------------------------------------------------ CHIMARRÃO TRADICIONAL
-  { id: "tradicional-1kg", nome: "Erva Mate Chimarrão Tradicional 1kg", rotulo: "Tradicional",
-    linha: "chimarrao", peso: "1 kg", preco: 13.5, cor: "#2f7d32", corTexto: "#e9f56b" },
-  { id: "tradicional-500g", nome: "Erva Mate Chimarrão Tradicional 500g", rotulo: "Tradicional",
-    linha: "chimarrao", peso: "500 g", preco: 7.0, cor: "#2f7d32", corTexto: "#e9f56b" },
-  { id: "moida-grossa-1kg", nome: "Erva Mate Chimarrão Moída Grossa 1kg", rotulo: "Moída Grossa",
-    linha: "chimarrao", peso: "1 kg", preco: 13.5, cor: "#1f5c2a", corTexto: "#f4d35e" },
-  { id: "grossa-1kg", nome: "Erva-Mate Chimarrão Grossa 1kg", rotulo: "Grossa",
-    linha: "chimarrao", peso: "1 kg", preco: 10.6, cor: "#3f7a2a", corTexto: "#fff3c4" },
-  { id: "capital-1kg", nome: "Erva Mate Chimarrão Capital 1kg", rotulo: "Capital",
-    linha: "chimarrao", peso: "1 kg", preco: 12.7, cor: "#123d1c", corTexto: "#c9f26b" },
-
-  // ------------------------------------------------ CHIMARRÃO COMPOSTO
-  { id: "composto-500g", nome: "Erva Mate Chimarrão Composto 500g", rotulo: "Composto",
-    linha: "composto", peso: "500 g", preco: 11.0, cor: "#3c6e47", corTexto: "#ffe9a8" },
-  { id: "magrimate-500g", nome: "Composto de Erva-Mate Magrimate 500g", rotulo: "Magrimate",
-    linha: "composto", peso: "500 g", preco: 13.0, cor: "#c2185b", corTexto: "#fff0f5" },
-  { id: "menta-500g", nome: "Composto de Erva Mate Sabor Menta - 500g", rotulo: "Sabor Menta",
-    linha: "composto", peso: "500 g", preco: 12.4, cor: "#1e8a6e", corTexto: "#eafff4" },
-  { id: "citrus-500g", nome: "Composto de Erva-Mate Citrus 500g", rotulo: "Citrus",
-    linha: "composto", peso: "500 g", preco: null, cor: "#f2b705", corTexto: "#1f3a12" },
-
-  // ------------------------------------------------ TERERÊ
-  { id: "terere-natural-500g", nome: "Composto de Tererê Natural 500g", rotulo: "Tererê Natural",
-    linha: "terere", peso: "500 g", preco: 8.5, cor: "#3f9b3a", corTexto: "#fdf6e3" },
-  { id: "terere-limao-menta-500g", nome: "Composto de Tererê Limão e Menta 500g", rotulo: "Tererê Limão e Menta",
-    linha: "terere", peso: "500 g", preco: null, cor: "#c7e83a", corTexto: "#123d1c" },
-  { id: "terere-abacaxi-500g", nome: "Composto de Tererê Abacaxi 500g", rotulo: "Tererê Abacaxi",
-    linha: "terere", peso: "500 g", preco: null, cor: "#f2a900", corTexto: "#1f3a12" },
-  { id: "terere-boldo-menta-500g", nome: "Composto de Tererê Boldo e Menta 500g", rotulo: "Tererê Boldo e Menta",
-    linha: "terere", peso: "500 g", preco: null, cor: "#25b49a", corTexto: "#06302a" },
-  { id: "combo-terere", nome: "Combo 2 Unidades - Composto de Tererê Abacaxi + Composto de Tererê Limão e Menta 500g",
-    rotulo: "Combo Tererê", linha: "terere", peso: "2 × 500 g", preco: null, cor: "#ff6b2c", corTexto: "#1b1206" },
-
-  // ------------------------------------------------ CHÁ MATE
-  { id: "cha-mate-tostado", nome: "Chá mate Tostado Timbó", rotulo: "Chá Mate Tostado",
-    linha: "cha", peso: "", preco: null, cor: "#7a3e14", corTexto: "#ffd88a" },
-
-  // ------------------------------------------------ COMPRA EM FARDOS
-  { id: "fardo-tradicional", nome: "Erva-Mate Chimarrão Tradicional - Fardo com 10x1Kg", rotulo: "Tradicional",
-    linha: "fardo", peso: "10 × 1 kg", preco: null, cor: "#2f7d32", corTexto: "#e9f56b" },
-  { id: "fardo-grossa", nome: "Erva-Mate Chimarrão Grossa - Fardo com 5x1Kg", rotulo: "Grossa",
-    linha: "fardo", peso: "5 × 1 kg", preco: null, cor: "#3f7a2a", corTexto: "#fff3c4" },
-  { id: "fardo-moida-grossa", nome: "Erva Mate Chimarrão Moída Grossa - Fardo com 10x500g", rotulo: "Moída Grossa",
-    linha: "fardo", peso: "10 × 500 g", preco: null, cor: "#1f5c2a", corTexto: "#f4d35e" },
-  { id: "fardo-safra-inverno", nome: "Erva Mate Chimarrão Safra de Inverno - Fardo com 10x1Kg", rotulo: "Safra de Inverno",
-    linha: "fardo", peso: "10 × 1 kg", preco: null, cor: "#1b3a5c", corTexto: "#e6f1ff" },
-  { id: "fardo-composto", nome: "Combo 10 Unidades - Erva Mate Chimarrão Composto 10 x 500g", rotulo: "Composto",
-    linha: "fardo", peso: "10 × 500 g", preco: null, cor: "#3c6e47", corTexto: "#ffe9a8" },
-  { id: "fardo-citrus", nome: "Composto de Erva-Mate Citrus - 10 Unidades x 500g", rotulo: "Citrus",
-    linha: "fardo", peso: "10 × 500 g", preco: null, cor: "#f2b705", corTexto: "#1f3a12" },
-  { id: "fardo-menta", nome: "Composto de Erva-Mate Sabor Menta 10 Unidades x 500g", rotulo: "Sabor Menta",
-    linha: "fardo", peso: "10 × 500 g", preco: 120.0, cor: "#1e8a6e", corTexto: "#eafff4" },
-  { id: "fardo-terere-limao-menta", nome: "Composto de Tererê Limão e Menta - Fardo com 10x500g", rotulo: "Tererê Limão e Menta",
-    linha: "fardo", peso: "10 × 500 g", preco: null, cor: "#c7e83a", corTexto: "#123d1c" },
-  { id: "fardo-terere-abacaxi", nome: "Composto de Tererê Abacaxi - Fardo com 10x500g", rotulo: "Tererê Abacaxi",
-    linha: "fardo", peso: "10 × 500 g", preco: null, cor: "#f2a900", corTexto: "#1f3a12" },
+  { id: "erva-mate-chimarrao-moida-grossa-500g", nome: "Erva Mate Chimarrão Moída Grossa 500g", rotulo: "Moída Grossa",
+    linha: "chimarrao", peso: "500 g", preco: 7.00, cor: "#1f5c2a", corTexto: "#f4d35e",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-tradicional/erva-mate-chimarrao-moida-grossa-500g" },
+  { id: "erva-mate-chimarrao-tradicional-500g", nome: "Erva Mate Chimarrão Tradicional 500g", rotulo: "Tradicional",
+    linha: "chimarrao", peso: "500 g", preco: 7.00, cor: "#2f7d32", corTexto: "#e9f56b",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-tradicional/erva-mate-chimarrao-tradicional-500g" },
+  { id: "erva-mate-chimarrao-grossa-1kg", nome: "Erva-Mate Chimarrão Grossa 1kg", rotulo: "Grossa",
+    linha: "chimarrao", peso: "1 kg", preco: 10.60, cor: "#3f7a2a", corTexto: "#fff3c4",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-tradicional/erva-mate-chimarrao-grossa-1kg" },
+  { id: "erva-mate-fesmate-fina-1-kg", nome: "Erva mate Fesmate Fina 1 kg", rotulo: "Fina",
+    linha: "chimarrao", peso: "1 kg", preco: 12.00, cor: "#0f4c81", corTexto: "#ffe066",
+    url: "https://www.lojaervamatetimbo.com.br/erva-mate-grossa/erva-mate-fesmate-fina-1-kg" },
+  { id: "erva-mate-chimarrao-capital-1kg", nome: "Erva-Mate Chimarrão Capital 1kg", rotulo: "Capital",
+    linha: "chimarrao", peso: "1 kg", preco: 12.70, cor: "#123d1c", corTexto: "#c9f26b",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-tradicional/erva-mate-chimarrao-capital-1kg" },
+  { id: "erva-mate-chimarrao-moida-grossa-1kg", nome: "Erva Mate Chimarrão Moída Grossa 1kg", rotulo: "Moída Grossa",
+    linha: "chimarrao", peso: "1 kg", preco: 13.50, cor: "#1f5c2a", corTexto: "#f4d35e",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-tradicional/erva-mate-chimarrao-moida-grossa-1kg" },
+  { id: "erva-mate-chimarrao-tradicional-1kg", nome: "Erva Mate Chimarrão Tradicional 1kg", rotulo: "Tradicional",
+    linha: "chimarrao", peso: "1 kg", preco: 13.50, cor: "#2f7d32", corTexto: "#e9f56b",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-tradicional/erva-mate-chimarrao-tradicional-1kg" },
+  { id: "erva-mate-chimarrao-composto-500g", nome: "Erva-Mate Chimarrão Composto 500g", rotulo: "Composto",
+    linha: "composto", peso: "500 g", preco: 11.00, cor: "#3c6e47", corTexto: "#ffe9a8",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-tradicional/erva-mate-chimarrao-tradicional-500g-" },
+  { id: "composto-de-erva-mate-citrus-500g", nome: "Composto de Erva-Mate Citrus 500g", rotulo: "Citrus",
+    linha: "composto", peso: "500 g", preco: 12.40, cor: "#f2b705", corTexto: "#1f3a12",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-composto/composto-de-erva-mate-citrus-500g" },
+  { id: "composto-de-erva-mate-sabor-menta-500g", nome: "Composto de Erva-Mate Sabor Menta - 500g", rotulo: "Menta",
+    linha: "composto", peso: "500 g", preco: 12.40, cor: "#1e8a6e", corTexto: "#eafff4",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-composto/composto-de-erva-mate-sabor-menta-500g" },
+  { id: "composto-de-erva-mate-magrimate-500g", nome: "Composto de Erva-Mate Magrimate 500g", rotulo: "Magrimate",
+    linha: "composto", peso: "500 g", preco: 13.00, cor: "#c2185b", corTexto: "#fff0f5",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-composto/composto-de-erva-mate-magrimate-500g" },
+  { id: "mistura-para-chimarrao-10g-10-unidades", nome: "Mistura para chimarrão 10g  (10 unidades)", rotulo: "Mistura para chimarrão",
+    linha: "composto", peso: "10 × 10 g", preco: 25.00, cor: "#8a5a2b", corTexto: "#fff1d6",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-composto/mistura-para-chimarrao-10g-10-unidades" },
+  { id: "composto-de-terere-abacaxi-500g", nome: "Composto de Tererê Abacaxi 500g", rotulo: "Tererê Abacaxi",
+    linha: "terere", peso: "500 g", preco: 8.50, cor: "#f2a900", corTexto: "#1f3a12",
+    url: "https://www.lojaervamatetimbo.com.br/terere/composto-de-terere-abacaxi-500g" },
+  { id: "composto-de-terere-boldo-e-menta-500g", nome: "Composto de Tererê Boldo e Menta 500g", rotulo: "Tererê Boldo e Menta",
+    linha: "terere", peso: "500 g", preco: 8.50, cor: "#2c6e3f", corTexto: "#f4f1c0",
+    url: "https://www.lojaervamatetimbo.com.br/terere/composto-de-terere-boldo-e-menta-500g" },
+  { id: "composto-de-terere-limao-e-menta-500g", nome: "Composto de Tererê Limão e Menta 500g", rotulo: "Tererê Limão e Menta",
+    linha: "terere", peso: "500 g", preco: 8.50, cor: "#c7e83a", corTexto: "#123d1c",
+    url: "https://www.lojaervamatetimbo.com.br/terere/composto-de-terere-500g" },
+  { id: "composto-de-terere-natural-500g", nome: "Composto de Tererê Natural 500g", rotulo: "Tererê Natural",
+    linha: "terere", peso: "500 g", preco: 8.50, cor: "#3f9b3a", corTexto: "#fdf6e3",
+    url: "https://www.lojaervamatetimbo.com.br/terere/composto-de-terere-natural-fardo-com-10x500g" },
+  { id: "terere-sabor-energetico-500g", nome: "Tererê Sabor Energético 500g", rotulo: "Tererê Sabor Energético",
+    linha: "terere", peso: "500 g", preco: 10.00, cor: "#14141a", corTexto: "#d7ff3a",
+    url: "https://www.lojaervamatetimbo.com.br/terere/terere-sabor-energetico-500g" },
+  { id: "combo-2-unidades-composto-de-terere-abacaxi-composto-de-terere-limao-e-menta-500g", nome: "Combo 2 Unidades - Composto de Tererê Abacaxi + Composto de Tererê Limão e Menta 500g", rotulo: "Tererê Abacaxi + Limão e Menta",
+    linha: "terere", peso: "2 × 500 g", preco: 17.00, cor: "#c7e83a", corTexto: "#123d1c",
+    url: "https://www.lojaervamatetimbo.com.br/terere/combo-2-unidades-composto-de-terere-abacaxi-composto-de-terere-limao-e-menta-500g" },
+  { id: "cha-mate-tostado-timbo", nome: "Chá mate Tostado Timbó", rotulo: "Chá Mate Tostado",
+    linha: "cha", peso: "", preco: 6.50, cor: "#7a3e14", corTexto: "#ffd88a",
+    url: "https://www.lojaervamatetimbo.com.br/magrimate-cha/cha-mate-tostado-timbo" },
+  { id: "cha-magrimate-30g-20-saches", nome: "Chá Magrimate 30g - 20 sachês", rotulo: "Chá Magrimate",
+    linha: "cha", peso: "20 sachês", preco: 13.90, cor: "#c2185b", corTexto: "#fff0f5",
+    url: "https://www.lojaervamatetimbo.com.br/magrimate-cha/cha-magrimate-30g-20-saches" },
+  { id: "composto-de-erva-mate-citrus-10-unidades-x-500g", nome: "Composto de Erva-Mate Citrus - 10 Unidades x 500g", rotulo: "Citrus",
+    linha: "fardo", peso: "10 × 500 g", preco: 120.00, cor: "#f2b705", corTexto: "#1f3a12",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-composto/composto-de-erva-mate-citrus-10x500g" },
+  { id: "composto-de-erva-mate-magrimate-10-unidades-x-500g", nome: "Composto de Erva-Mate Magrimate - 10 Unidades x 500g", rotulo: "Magrimate",
+    linha: "fardo", peso: "10 × 500 g", preco: 130.00, cor: "#c2185b", corTexto: "#fff0f5",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-composto/composto-de-erva-mate-magrimate-fardo-com-10x500g" },
+  { id: "composto-de-erva-mate-sabor-menta-10-unidades-x-500g", nome: "Composto de Erva-Mate Sabor Menta 10 Unidades x 500g", rotulo: "Menta",
+    linha: "fardo", peso: "10 × 500 g", preco: 120.00, cor: "#1e8a6e", corTexto: "#eafff4",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-composto/composto-de-erva-mate-menta" },
+  { id: "composto-de-terere-abacaxi-fardo-com-10x500g", nome: "Composto de Tererê Abacaxi - Fardo com 10x500g", rotulo: "Tererê Abacaxi",
+    linha: "fardo", peso: "10 × 500 g", preco: 80.00, cor: "#f2a900", corTexto: "#1f3a12",
+    url: "https://www.lojaervamatetimbo.com.br/terere/composto-de-terere-abacaxi-fardo-com-15x500g" },
+  { id: "composto-de-terere-limao-e-menta-fardo-com-10x500g", nome: "Composto de Tererê Limão e Menta - Fardo com 10x500g", rotulo: "Tererê Limão e Menta",
+    linha: "fardo", peso: "10 × 500 g", preco: 80.00, cor: "#c7e83a", corTexto: "#123d1c",
+    url: "https://www.lojaervamatetimbo.com.br/terere/composto-de-terere-limao-e-menta-fardo-com-15x500g" },
+  { id: "erva-mate-chimarrao-moida-grossa-fardo-com-10x500g", nome: "Erva Mate Chimarrão Moída Grossa - Fardo com 10x500g", rotulo: "Moída Grossa",
+    linha: "fardo", peso: "10 × 500 g", preco: 65.00, cor: "#1f5c2a", corTexto: "#f4d35e",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-tradicional/erva-mate-chimarrao-moida-grossa-fardo-com-20x500g" },
+  { id: "erva-mate-chimarrao-safra-de-inverno-fardo-com-10x1kg", nome: "Erva Mate Chimarrão Safra de Inverno - Fardo com 10x1Kg", rotulo: "Safra de Inverno",
+    linha: "fardo", peso: "10 × 1 kg", preco: 160.00, cor: "#1b3a5c", corTexto: "#e6f1ff",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-tradicional/erva-mate-chimarrao-safra-de-inverno-fardo-com-10x1kg" },
+  { id: "erva-mate-chimarrao-tradicional-fardo-com-10x500g", nome: "Erva Mate Chimarrão Tradicional - Fardo com 10x500g", rotulo: "Tradicional",
+    linha: "fardo", peso: "10 × 500 g", preco: 65.00, cor: "#2f7d32", corTexto: "#e9f56b",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-tradicional/erva-mate-chimarrao-tradicional-fardo-com-20x500g" },
+  { id: "erva-mate-chimarrao-grossa-fardo-5x1kg", nome: "Erva-Mate Chimarrão Grossa - Fardo 5x1Kg", rotulo: "Grossa",
+    linha: "fardo", peso: "5 × 1 kg", preco: 50.00, cor: "#3f7a2a", corTexto: "#fff3c4",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-tradicional/erva-mate-chimarrao-grossa-fardo-15x1kg" },
+  { id: "erva-mate-chimarrao-grossa-fardo-com-5x1kg", nome: "Erva-Mate Chimarrão Grossa - Fardo com 5x1Kg", rotulo: "Grossa",
+    linha: "fardo", peso: "5 × 1 kg", preco: 60.00, cor: "#3f7a2a", corTexto: "#fff3c4",
+    url: "https://www.lojaervamatetimbo.com.br/compra-em-fardos/erva-mate-chimarrao-grossa-fardo-com-15x1kg" },
+  { id: "erva-mate-chimarrao-moida-grossa-fardo-com-10x1kg", nome: "Erva-Mate Chimarrão Moída Grossa - Fardo com 10x1Kg", rotulo: "Moída Grossa",
+    linha: "fardo", peso: "10 × 1 kg", preco: 130.00, cor: "#1f5c2a", corTexto: "#f4d35e",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-tradicional/erva-mate-chimarrao-moida-grossa-fardo-com-10x1kg" },
+  { id: "erva-mate-chimarrao-tradicional-fardo-com-10x1kg", nome: "Erva-Mate Chimarrão Tradicional - Fardo com 10x1Kg", rotulo: "Tradicional",
+    linha: "fardo", peso: "10 × 1 kg", preco: 130.00, cor: "#2f7d32", corTexto: "#e9f56b",
+    url: "https://www.lojaervamatetimbo.com.br/chimarrao-tradicional/erva-mate-chimarrao-tradicional-fardo-com-10x1kg" },
 ];
