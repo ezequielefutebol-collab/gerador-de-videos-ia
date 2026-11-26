@@ -303,6 +303,53 @@ HTML = """<!DOCTYPE html>
   .config-info strong { color: var(--accent2); }
   .config-info a { color: var(--accent); }
 
+  .api-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .api-row label {
+    min-width: 110px;
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.9rem;
+  }
+
+  .api-row input[type="text"],
+  .api-row input[type="password"] {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid #3a3a4a;
+    border-radius: 8px;
+    padding: 9px 12px;
+    color: var(--text);
+    font-size: 0.85rem;
+    font-family: monospace;
+    outline: none;
+  }
+
+  .api-row input:focus { border-color: var(--accent2); }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .badge-ok  { background: rgba(76,175,80,0.2); color: #81c784; border: 1px solid #4caf50; }
+  .badge-off { background: rgba(255,255,255,0.05); color: #888; border: 1px solid #444; }
+
+  .btn-sm {
+    padding: 8px 14px;
+    font-size: 0.82rem;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+
   .spinner {
     display: inline-block;
     width: 18px;
@@ -371,14 +418,40 @@ HTML = """<!DOCTYPE html>
     </div>
 
     <div class="config-info">
-      <strong>⚡ Modo atual:</strong>
-      <span id="modo-atual">Verificando...</span><br><br>
-      Para ativar o <strong>modo IA</strong> (receitas personalizadas + melhores visuais):
-      <ul style="margin-top:8px; padding-left:20px; line-height:1.8">
-        <li><strong>Claude AI</strong>: <a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a> → defina <code>ANTHROPIC_API_KEY</code></li>
-        <li><strong>Pexels (imagens)</strong>: <a href="https://www.pexels.com/api/" target="_blank">pexels.com/api</a> → defina <code>PEXELS_API_KEY</code></li>
-      </ul>
-      <small>Sem APIs, o sistema funciona com receitas embutidas e visuais gerados localmente.</small>
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap">
+        <strong>⚡ Modo atual:</strong>
+        <span id="modo-atual" style="color:var(--text)">Verificando...</span>
+      </div>
+
+      <!-- Pexels API Key -->
+      <div class="api-row">
+        <label>
+          <span id="badge-pexels" class="badge badge-off">OFF</span>
+          Pexels
+        </label>
+        <input type="password" id="input-pexels" placeholder="Cole sua Pexels API Key aqui...">
+        <button class="btn btn-sm" onclick="salvarKey('pexels')">Ativar</button>
+      </div>
+      <div style="font-size:0.78rem; margin:4px 0 10px 120px; color:#666">
+        Vídeos e fotos reais de alta qualidade ·
+        <a href="https://www.pexels.com/api/" target="_blank">pexels.com/api</a> (gratuito)
+      </div>
+
+      <!-- Claude API Key -->
+      <div class="api-row">
+        <label>
+          <span id="badge-claude" class="badge badge-off">OFF</span>
+          Claude AI
+        </label>
+        <input type="password" id="input-claude" placeholder="Cole sua Anthropic API Key aqui...">
+        <button class="btn btn-sm" onclick="salvarKey('claude')">Ativar</button>
+      </div>
+      <div style="font-size:0.78rem; margin:4px 0 0 120px; color:#666">
+        Receitas geradas por IA para qualquer prato ·
+        <a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a>
+      </div>
+
+      <div id="msg-config" style="margin-top:10px; font-size:0.85rem; min-height:18px; color:var(--success)"></div>
     </div>
   </div>
 
@@ -396,7 +469,7 @@ HTML = """<!DOCTYPE html>
       <div class="etapa" id="etapa-1"><span class="etapa-icon">📝</span> Criando receita e roteiro</div>
       <div class="etapa" id="etapa-2"><span class="etapa-icon">🎙️</span> Gerando narração por voz</div>
       <div class="etapa" id="etapa-3"><span class="etapa-icon">🎵</span> Compondo trilha sonora</div>
-      <div class="etapa" id="etapa-4"><span class="etapa-icon">🖼️</span> Preparando imagens das cenas</div>
+      <div class="etapa" id="etapa-4"><span class="etapa-icon">🎥</span> Baixando vídeos/fotos (Pexels)</div>
       <div class="etapa" id="etapa-5"><span class="etapa-icon">✂️</span> Editando e sincronizando</div>
       <div class="etapa" id="etapa-6"><span class="etapa-icon">🎬</span> Renderizando vídeo final</div>
     </div>
@@ -447,8 +520,62 @@ async function verificarModo() {
     const r = await fetch('/api/status');
     const d = await r.json();
     document.getElementById('modo-atual').textContent =
-      d.modo_descricao || 'modo básico (sem API keys)';
+      d.modo_descricao || 'modo básico';
+
+    // Atualiza badges
+    const bp = document.getElementById('badge-pexels');
+    const bc = document.getElementById('badge-claude');
+    if (d.tem_pexels) {
+      bp.textContent = 'ON';
+      bp.className = 'badge badge-ok';
+    } else {
+      bp.textContent = 'OFF';
+      bp.className = 'badge badge-off';
+    }
+    if (d.tem_claude) {
+      bc.textContent = 'ON';
+      bc.className = 'badge badge-ok';
+    } else {
+      bc.textContent = 'OFF';
+      bc.className = 'badge badge-off';
+    }
   } catch(e) {}
+}
+
+async function salvarKey(tipo) {
+  const campo = tipo === 'pexels'
+    ? document.getElementById('input-pexels')
+    : document.getElementById('input-claude');
+
+  const val = campo.value.trim();
+  if (!val) { campo.focus(); return; }
+
+  const body = tipo === 'pexels'
+    ? { pexels_key: val }
+    : { anthropic_key: val };
+
+  try {
+    const r = await fetch('/api/configurar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const d = await r.json();
+    if (d.ok) {
+      campo.value = '';
+      campo.placeholder = '✓ Key salva!';
+      setTimeout(() => {
+        campo.placeholder = tipo === 'pexels'
+          ? 'Cole sua Pexels API Key aqui...'
+          : 'Cole sua Anthropic API Key aqui...';
+      }, 3000);
+      document.getElementById('msg-config').textContent =
+        `✅ ${tipo === 'pexels' ? 'Pexels' : 'Claude AI'} ativado com sucesso!`;
+      await verificarModo();
+    }
+  } catch(e) {
+    document.getElementById('msg-config').textContent = '❌ Erro ao salvar key.';
+  }
 }
 
 function usarSugestao(el) {
@@ -602,19 +729,37 @@ def api_status():
     tem_pexels = bool(config.PEXELS_API_KEY)
 
     if tem_claude and tem_pexels:
-        modo = "IA completa (Claude + imagens Pexels)"
+        modo = "IA completa — Claude AI + vídeos/fotos Pexels"
     elif tem_claude:
-        modo = "IA parcial (Claude AI ativo, sem imagens Pexels)"
+        modo = "Claude AI ativo — sem imagens Pexels"
     elif tem_pexels:
-        modo = "Imagens Pexels (sem Claude AI)"
+        modo = "Imagens Pexels ativas — sem Claude AI"
     else:
-        modo = "modo básico (configure ANTHROPIC_API_KEY e PEXELS_API_KEY para melhor qualidade)"
+        modo = "modo básico — configure as API keys para qualidade máxima"
 
     return jsonify({
         "tem_claude": tem_claude,
         "tem_pexels": tem_pexels,
         "modo_descricao": modo
     })
+
+
+@app.route("/api/configurar", methods=["POST"])
+def api_configurar():
+    """Define API keys em runtime sem reiniciar o servidor."""
+    data = request.get_json() or {}
+
+    if "pexels_key" in data:
+        nova = data["pexels_key"].strip()
+        config.PEXELS_API_KEY = nova
+        os.environ["PEXELS_API_KEY"] = nova
+
+    if "anthropic_key" in data:
+        nova = data["anthropic_key"].strip()
+        config.ANTHROPIC_API_KEY = nova
+        os.environ["ANTHROPIC_API_KEY"] = nova
+
+    return jsonify({"ok": True})
 
 
 @app.route("/api/gerar", methods=["POST"])
