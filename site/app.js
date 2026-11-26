@@ -2,6 +2,7 @@
   "use strict";
 
   var LOJA = window.LOJA || {};
+  var PREVIA = !!window.PREVIA; // prévia de design: pedidos e cadastro desativados
   var LINHAS = window.LINHAS || {};
   var PRODUTOS = window.PRODUTOS || [];
   var $ = function (s, el) { return (el || document).querySelector(s); };
@@ -195,6 +196,7 @@
 
   $("#finalizar").addEventListener("click", function () {
     if (!sacola.length) return;
+    if (PREVIA) { avisar("Prévia: pedidos desativados"); return; }
     var linhas = sacola.map(function (i) {
       return "• " + i.qtd + "× " + porId[i.id].nome + " (" + i.peso + ") — " + reais(i.preco * i.qtd);
     });
@@ -216,6 +218,7 @@
     e.preventDefault();
     var email = $("#email").value.trim();
     var msg = $("#form-msg");
+    if (PREVIA) { msg.textContent = "Prévia: cadastro desativado."; return; }
     if (LOJA.email) {
       location.href = "mailto:" + LOJA.email + "?subject=" + encodeURIComponent("Quero receber as novidades") +
         "&body=" + encodeURIComponent("Olá! Quero receber as novidades e o cupom de 10% no e-mail " + email + ".");
@@ -236,7 +239,7 @@
   if (LOJA.instagram) contatos.push('<a href="https://instagram.com/' + esc(LOJA.instagram) + '" target="_blank" rel="noopener">@' + esc(LOJA.instagram) + "</a>");
   if (LOJA.email) contatos.push('<a href="mailto:' + esc(LOJA.email) + '">' + esc(LOJA.email) + "</a>");
   if (LOJA.endereco) contatos.push("<span>" + esc(LOJA.endereco) + "</span>");
-  if (LOJA.site) contatos.push("<span>" + esc(LOJA.site) + "</span>");
+  if (LOJA.site && !PREVIA) contatos.push("<span>" + esc(LOJA.site) + "</span>");
   $("#rodape-contato").innerHTML = contatos.map(function (c) { return "<li>" + c + "</li>"; }).join("");
 
   /* ======================================================= TOPO */
